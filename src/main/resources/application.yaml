@@ -2,6 +2,26 @@
 spring:
   application:
     name: "bookshelf"
+  datasource:
+    url: jdbc:h2:./bookshelf;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+    username: birgit
+    password: geheim
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  #    generate-ddl: true
+#    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: always
+  security:
+    user:
+      name: birgit
+      password: geheim
 
 application:
   title: '@project.name@'
@@ -21,3 +41,9 @@ swagger:
     license:
       name: "MIT License"
       url: "https://opensource.org/licenses/MIT"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

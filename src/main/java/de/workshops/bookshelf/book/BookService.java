@@ -6,9 +6,9 @@ import java.util.List;
 
 @Service
 public class BookService {
-    private final BookRepository bookRepository;
+    private final BookJpaRepository bookRepository;
 
-    public BookService(BookRepository bookRepository) {
+    public BookService(BookJpaRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
@@ -17,24 +17,19 @@ public class BookService {
     }
 
     public Book getByIsbn(String isbn) {
-        return bookRepository.findAll().stream()
-            .filter(book -> book.getIsbn().equals(isbn))
-            .findFirst()
-            .orElseThrow(() ->new BookException("No book for this ISBN"));
+        var book = bookRepository.findByIsbn(isbn);
+        if (book == null) {
+            throw new BookException("No book for this ISBN");
+        }
+        return book;
     }
 
     public List<Book> getByAuthor(String author) {
-        return bookRepository.findAll().stream()
-            .filter(book -> book.getAuthor().startsWith(author))
-            .toList();
+        return bookRepository.findByAuthorStartingWith(author);
     }
 
     public List<Book> searchBooks(BookSearchRequest bookSearchRequest) {
-        return bookRepository.findAll().stream()
-            .filter(book ->
-                book.getIsbn().equals(bookSearchRequest.isbn())
-                    || book.getAuthor().startsWith(bookSearchRequest.author()))
-            .toList();
+        return bookRepository.searchBy(bookSearchRequest.author(), bookSearchRequest.isbn());
     }
 
     public Book create(Book book) {

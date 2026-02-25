@@ -1,5 +1,6 @@
 ###
 GET http://localhost:8080/book
+Authorization: Basic birgit geheim
 
 ###
 GET http://localhost:8080/book/1234

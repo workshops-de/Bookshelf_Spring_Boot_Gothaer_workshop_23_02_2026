@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -19,12 +20,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithMockUser
 class BookRestControllerMockitoBeanTest {
 
     @Autowired
@@ -77,7 +80,19 @@ class BookRestControllerMockitoBeanTest {
         assertThat(isbnCaptor.getValue()).isEqualTo(isbn);
     }
 
+    // MockUser only has default role USER
     @Test
+    void createBook_forbidden() throws Exception {
+        mockMvc.perform(post("/book")
+                .with(csrf())
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     void createBook() throws Exception {
         String isbn = "111-1111111111";
         String title = "Data Oriented Programming with Java";
@@ -93,6 +108,7 @@ class BookRestControllerMockitoBeanTest {
         when(bookService.create(any(Book.class))).thenReturn(expectedBook);
 
         var mvcResult = mockMvc.perform(post("/book")
+                .with(csrf())
                 .content("""
                                 {
                                     "isbn": "%s",
@@ -100,7 +116,8 @@ class BookRestControllerMockitoBeanTest {
                                     "author": "%s",
                                     "description": "%s"
                                 }""".formatted(isbn, title, author, description))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+            )
             .andExpect(status().isOk())
             .andReturn();
 
