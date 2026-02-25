@@ -31,4 +31,9 @@ public class BookRepository {
     public List<Book> findAll() {
         return books;
     }
+
+    public Book save(Book book) {
+        books.add(book);
+        return book;
+    }
 }

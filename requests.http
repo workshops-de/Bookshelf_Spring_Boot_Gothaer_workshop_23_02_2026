@@ -1,0 +1,21 @@
+###
+GET http://localhost:8080/book
+
+###
+GET http://localhost:8080/book/1234
+
+###
+GET http://localhost:8080/book/123456789012345
+
+###
+GET http://localhost:8080/book/978-3826655488
+
+###
+POST http://localhost:8080/book/search
+Content-Type: application/json
+
+{
+  "isbn": "978-3836211161",
+  "author": "Robert",
+  "something": "else"
+}

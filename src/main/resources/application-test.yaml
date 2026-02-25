@@ -1,0 +1,10 @@
+server:
+  port: 8081
+
+application:
+  version: '@project.version@ - Test'
+
+swagger:
+  info:
+    title: "My Bookshelf API  - Test"
+    capacity: 2000

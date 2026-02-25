@@ -38,13 +38,18 @@ public class BookRestController {
     }
 
     @GetMapping(params = "author")
-    public List<Book> getByAuthor(@RequestParam String author) {
+    public List<Book> getByAuthor(@RequestParam(required = false) String author) {
         return bookService.getByAuthor(author);
     }
 
     @PostMapping("/search")
     public List<Book> searchBooks(@RequestBody @Valid BookSearchRequest bookSearchRequest) {
         return bookService.searchBooks(bookSearchRequest);
+    }
+
+    @PostMapping
+    public Book addBook(@RequestBody @Valid Book book) {
+        return bookService.create(book);
     }
 
     @ExceptionHandler(BookException.class)

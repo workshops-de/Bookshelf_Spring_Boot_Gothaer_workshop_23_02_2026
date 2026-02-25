@@ -1,0 +1,9 @@
+server:
+  port: 9090
+
+application:
+  version: '@project.version@ - Production'
+
+springdoc:
+  api-docs:
+    enabled: false

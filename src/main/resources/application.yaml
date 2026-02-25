@@ -1,0 +1,23 @@
+
+spring:
+  application:
+    name: "bookshelf"
+
+application:
+  title: '@project.name@'
+  version: '@project.version@ - Default'
+
+logging:
+  level:
+    de.birgitkratz.bookshelf: debug
+
+debug: false
+
+swagger:
+  info:
+    title: "My Bookshelf API  - Default"
+    version: "v0.0.1"
+    capacity: 1000
+    license:
+      name: "MIT License"
+      url: "https://opensource.org/licenses/MIT"

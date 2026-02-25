@@ -36,4 +36,8 @@ public class BookService {
                     || book.getAuthor().startsWith(bookSearchRequest.author()))
             .toList();
     }
+
+    public Book create(Book book) {
+        return bookRepository.save(book);
+    }
 }
